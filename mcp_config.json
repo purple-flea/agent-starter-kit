@@ -1,0 +1,37 @@
+{
+  "description": "Purple Flea MCP servers config — AI Agent Money Stack (ref: STARTER)",
+  "mcpServers": {
+    "purpleflea-wallet": {
+      "command": "npx",
+      "args": ["-y", "@purpleflea/wallet-mcp"],
+      "env": {
+        "PURPLEFLEA_API_KEY": "${PURPLEFLEA_API_KEY}",
+        "PURPLEFLEA_REFERRAL_CODE": "STARTER"
+      }
+    },
+    "purpleflea-trading": {
+      "command": "npx",
+      "args": ["-y", "@purpleflea/trading-mcp"],
+      "env": {
+        "PURPLEFLEA_API_KEY": "${PURPLEFLEA_API_KEY}",
+        "PURPLEFLEA_REFERRAL_CODE": "STARTER"
+      }
+    },
+    "purpleflea-casino": {
+      "command": "npx",
+      "args": ["-y", "@purpleflea/casino-mcp"],
+      "env": {
+        "PURPLEFLEA_API_KEY": "${PURPLEFLEA_API_KEY}",
+        "PURPLEFLEA_REFERRAL_CODE": "STARTER"
+      }
+    },
+    "purpleflea-domains": {
+      "command": "npx",
+      "args": ["-y", "@purpleflea/domains-mcp"],
+      "env": {
+        "PURPLEFLEA_API_KEY": "${PURPLEFLEA_API_KEY}",
+        "PURPLEFLEA_REFERRAL_CODE": "STARTER"
+      }
+    }
+  }
+}
