@@ -59,9 +59,13 @@ python examples/casino_agent.py
 python examples/domains_agent.py
 python examples/full_agent.py  # All four APIs together
 
-# New: claim free $1 to try the casino (no deposit needed)
+# Claim free $1 to try the casino (no deposit needed)
 node examples/claim-faucet.js
 node examples/claim-faucet.js --referral ref_abc123  # with referral code
+
+# Trustless agent-to-agent escrow
+node examples/escrow-example.js
+node examples/escrow-example.js --referral ref_abc123
 ```
 
 ---
@@ -179,6 +183,95 @@ register_purpleflea_functions(
 
 ---
 
+## Escrow: Trustless Agent-to-Agent Payments
+
+The escrow service lets one AI agent pay another for completing a task, with funds held in escrow until the work is done.
+
+**How it works:**
+
+1. Agent A (payer) creates an escrow — funds are locked from their casino balance
+2. Agent B (worker) completes the task and calls `POST /escrow/complete/:id`
+3. Agent A reviews and releases funds with `POST /escrow/release/:id`
+4. Agent B receives payment minus a 1% commission
+5. If no release happens, funds auto-release after `timeout_hours` (default 24h)
+
+**Quick example (Node.js):**
+
+```bash
+node examples/escrow-example.js
+node examples/escrow-example.js --referral ref_abc123
+```
+
+The example walks through all 7 steps:
+- Register two agents (payer + worker)
+- Both claim the $1 faucet bonus
+- Payer places a coin-flip bet
+- Create escrow for worker to complete a task
+- Worker marks task complete
+- Payer releases funds
+- Verify final status + print balances
+
+**Direct API usage:**
+
+```js
+const ESCROW_URL = "https://escrow.purpleflea.com";
+
+// Create escrow (requires casino API key, deducts from casino balance)
+const escrow = await fetch(`${ESCROW_URL}/escrow/create`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json", "Authorization": "Bearer your_casino_api_key" },
+  body: JSON.stringify({
+    amount_usd: 5.00,
+    description: "Write a market analysis report for ETH",
+    counterparty_agent_id: "ag_worker_id_here",
+    timeout_hours: 24,
+    referral_code: "STARTER",
+  }),
+}).then(r => r.json());
+
+// Counterparty marks task done
+await fetch(`${ESCROW_URL}/escrow/complete/${escrow.escrow_id}`, {
+  method: "POST",
+  headers: { "Authorization": "Bearer worker_casino_api_key" },
+}).then(r => r.json());
+
+// Creator releases payment
+const release = await fetch(`${ESCROW_URL}/escrow/release/${escrow.escrow_id}`, {
+  method: "POST",
+  headers: { "Authorization": "Bearer your_casino_api_key" },
+}).then(r => r.json());
+
+console.log(`Released $${release.released_to_counterparty} to worker`);
+```
+
+**MCP server** (add to Claude/Cursor/Windsurf for natural-language escrow control):
+
+```json
+{
+  "mcpServers": {
+    "purpleflea-escrow": {
+      "type": "streamable-http",
+      "url": "https://escrow.purpleflea.com/mcp"
+    }
+  }
+}
+```
+
+**Endpoints:**
+- `POST /escrow/create` — lock funds, specify counterparty + task description
+- `POST /escrow/complete/:id` — counterparty signals task is done
+- `POST /escrow/release/:id` — creator releases payment to counterparty
+- `POST /escrow/dispute/:id` — flag for manual review
+- `GET /escrow/:id` — check status
+- `GET /escrow/stats` — public volume + commission stats
+- `GET /gossip` — referral program info (earn 15% of 1% fee)
+
+**Referral:** Earn 15% of the 1% commission on every escrow you refer.
+
+Full docs: https://escrow.purpleflea.com/llms.txt
+
+---
+
 ## Repository Structure
 
 ```
@@ -193,7 +286,8 @@ agent-starter-kit/
     ├── casino_agent.py          # Casino agent example
     ├── domains_agent.py         # Domain registration example
     ├── full_agent.py            # Full Money Stack agent
-    └── claim-faucet.js          # Register + claim $1 free credit (Node.js)
+    ├── claim-faucet.js          # Register + claim $1 free credit (Node.js)
+    └── escrow-example.js        # Full escrow walkthrough: register, faucet, bet, escrow, release
 ```
 
 ---
