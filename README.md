@@ -5,6 +5,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![PyPI](https://img.shields.io/pypi/v/purpleflea)](https://pypi.org/project/purpleflea/)
 [![GitHub](https://img.shields.io/github/stars/purple-flea/agent-starter-kit)](https://github.com/purple-flea/agent-starter-kit)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18808440.svg)](https://doi.org/10.5281/zenodo.18808440)
 
 ---
 
@@ -203,6 +204,13 @@ Every API call made with referral code **`STARTER`** earns you commissions:
 - Domains: https://domains.purpleflea.com/docs
 
 ---
+
+## Research
+
+This project is referenced in:
+
+> **"Purple Flea: A Multi-Agent Financial Infrastructure Protocol for Autonomous AI Systems"**
+> [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.18808440.svg)](https://doi.org/10.5281/zenodo.18808440)
 
 ## License
 
