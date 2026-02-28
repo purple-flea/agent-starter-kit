@@ -11,7 +11,7 @@
 
 ## What Is This?
 
-This starter kit is a **batteries-included template** for building AI agents that can autonomously handle real money. It wires up all four Purple Flea APIs out of the box:
+This starter kit is a **batteries-included template** for building AI agents that can autonomously handle real money. It wires up all six Purple Flea APIs out of the box:
 
 | API | What It Does | Referral |
 |-----|-------------|---------|
@@ -19,6 +19,8 @@ This starter kit is a **batteries-included template** for building AI agents tha
 | [Trading](https://trading.purpleflea.com) | DEX/CEX trading, 275+ markets | 20% |
 | [Casino](https://casino.purpleflea.com) | Provably fair games | 10% |
 | [Domains](https://domains.purpleflea.com) | Register/manage domains | 15% |
+| [Faucet](https://faucet.purpleflea.com) | Free $1 for new agents | — |
+| [Escrow](https://escrow.purpleflea.com) | Trustless agent-to-agent payments | 15% of 1% fee |
 
 All APIs are **agent-native**: JSON-only, no CAPTCHAs, no human-in-the-loop flows.
 
@@ -56,6 +58,10 @@ python examples/trading_agent.py
 python examples/casino_agent.py
 python examples/domains_agent.py
 python examples/full_agent.py  # All four APIs together
+
+# New: claim free $1 to try the casino (no deposit needed)
+node examples/claim-faucet.js
+node examples/claim-faucet.js --referral ref_abc123  # with referral code
 ```
 
 ---
@@ -98,6 +104,14 @@ Add to your MCP config (`~/.claude/mcp_servers.json` or equivalent):
         "PURPLEFLEA_API_KEY": "your_api_key_here",
         "PURPLEFLEA_REFERRAL_CODE": "STARTER"
       }
+    },
+    "purpleflea-faucet": {
+      "type": "streamable-http",
+      "url": "https://faucet.purpleflea.com/mcp"
+    },
+    "purpleflea-escrow": {
+      "type": "streamable-http",
+      "url": "https://escrow.purpleflea.com/mcp"
     }
   }
 }
@@ -178,7 +192,8 @@ agent-starter-kit/
     ├── trading_agent.py         # Trading bot example
     ├── casino_agent.py          # Casino agent example
     ├── domains_agent.py         # Domain registration example
-    └── full_agent.py            # Full Money Stack agent
+    ├── full_agent.py            # Full Money Stack agent
+    └── claim-faucet.js          # Register + claim $1 free credit (Node.js)
 ```
 
 ---
@@ -191,6 +206,7 @@ Every API call made with referral code **`STARTER`** earns you commissions:
 - **Trading API:** 20% of trading fees
 - **Casino API:** 10% of house edge
 - **Domains API:** 15% of registration fees
+- **Escrow API:** 15% of the 1% commission fee
 
 [Sign up at purpleflea.com](https://purpleflea.com/referral?code=STARTER) to track your earnings.
 
@@ -202,6 +218,8 @@ Every API call made with referral code **`STARTER`** earns you commissions:
 - Trading: https://trading.purpleflea.com/docs
 - Casino: https://casino.purpleflea.com/docs
 - Domains: https://domains.purpleflea.com/docs
+- Faucet: https://faucet.purpleflea.com/llms.txt
+- Escrow: https://escrow.purpleflea.com/llms.txt
 
 ---
 
